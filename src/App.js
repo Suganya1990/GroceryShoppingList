@@ -24,6 +24,7 @@ function App() {
           if (item.id === editID) {
             return { ...item, title: name }
           }
+          return item
         })
       )
       setName('')
@@ -69,6 +70,10 @@ function App() {
     setEditID(id)
     setName(specificItem.title)
   }
+
+  useEffect(() => {
+    localStorage.setItem('list', JSON.stringify(list))
+  }, [list])
   return (
     <section className='section-center'>
       <form action='' className='grocery-form' onSubmit={handleSubmit}>
