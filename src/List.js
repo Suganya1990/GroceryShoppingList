@@ -3,7 +3,8 @@ import { FaEdit, FaTrash } from 'react-icons/fa'
 const List = ({ items, removeItem, editItem }) => {
   return (
     <div className='grocery-list'>
-      {items.map((item) => {
+      {items.map((item) =>
+      {
         const { id, title } = item
         return (
           <article className='grocery-item' key={id}>
@@ -30,7 +31,8 @@ const List = ({ items, removeItem, editItem }) => {
             </div>
           </article>
         )
-      })}
+      }
+      )}
     </div>
   )
 }

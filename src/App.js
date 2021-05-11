@@ -2,9 +2,19 @@ import React, { useState, useEffect } from 'react'
 import List from './List'
 import Alert from './Alert'
 
+const getLocalStorage = () => {
+  let list = localStorage.getItem('list')
+
+  if (list) {
+    return JSON.parse(localStorage.getItem('list'))
+  } else {
+    return []
+  }
+}
+
 function App() {
   const [name, setName] = useState('')
-  const [list, setList] = useState([])
+  const [list, setList] = useState(getLocalStorage())
   const [isEditing, setIsEditing] = useState(false)
   const [editID, setEditID] = useState(null)
   const [alert, setAlert] = useState({
@@ -50,9 +60,6 @@ function App() {
   ) => {
     setAlert({ show, type, msg })
   }
-  const clearAlert = () => {
-    showAlert(true, 'danger', 'empty list')
-  }
 
   const clearList = () => {
     showAlert(true, 'danger', 'empty List')
@@ -77,7 +84,7 @@ function App() {
   return (
     <section className='section-center'>
       <form action='' className='grocery-form' onSubmit={handleSubmit}>
-        {alert.show && <Alert {...alert} removeAlert={showAlert} />}
+        {alert.show && <Alert {...alert} removeAlert={showAlert} list={list} />}
         <h3> Grocery Bud</h3>
         <div className='form-control'>
           <input
