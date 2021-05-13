@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import List from './List'
 import Alert from './Alert'
 
@@ -14,6 +15,7 @@ const getLocalStorage = () => {
 
 function App() {
   const [name, setName] = useState('')
+  const [dish, setDish] = useState('')
   const [list, setList] = useState(getLocalStorage())
   const [isEditing, setIsEditing] = useState(false)
   const [editID, setEditID] = useState(null)
@@ -23,6 +25,24 @@ function App() {
     type: '',
   })
 
+  const handleGrocerySubmit = (e) => {
+    e.preventDefault()
+
+    const options = {
+      method: 'GET',
+      url: 'https://edamam-food-and-grocery-database.p.rapidapi.com/parser',
+      params: { ingr: { dish } },
+    }
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data)
+      })
+      .catch(function (error) {
+        console.error(error)
+      })
+  }
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!name) {
@@ -83,9 +103,27 @@ function App() {
   }, [list])
   return (
     <section className='section-center'>
-      <form action='' className='grocery-form' onSubmit={handleSubmit}>
+      <form action='' className='grocery-form'>
         {alert.show && <Alert {...alert} removeAlert={showAlert} list={list} />}
         <h3> Grocery Bud</h3>
+        <div className='form-control'>
+          <input
+            type='text'
+            className='grocery'
+            placeholder='e.g. Lasagna'
+            value={dish}
+            onChange={(e) => {
+              setDish(e.target.value)
+            }}
+          />
+          <button
+            type='submit'
+            className='submit-btn'
+            onClick={handleGrocerySubmit}
+          >
+            Get Items
+          </button>
+        </div>
         <div className='form-control'>
           <input
             type='text'
@@ -96,7 +134,7 @@ function App() {
               setName(e.target.value)
             }}
           />
-          <button type='submit' className='submit-btn'>
+          <button type='submit' className='submit-btn' onClick={handleSubmit}>
             {isEditing ? 'edit' : 'submit'}
           </button>
         </div>
